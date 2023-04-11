@@ -21,6 +21,7 @@ public class Robot {
         this.currentXPosition = initialXPosition;
         this.currentYPosition = initialYPosition;
         movesHistory.add(getPosition());
+        movesCounter += 1;
     }
 
     public int getInitialXPosition() {
@@ -68,12 +69,12 @@ public class Robot {
     }
 
     public void printLastPosition(int n) {
-        int numberOfElements;
-        if (n > movesCounter) {
-            numberOfElements = 0;
-        } else numberOfElements = movesCounter - n;
+        int numberOfElements = 0;
+        if (n < movesCounter) {
+            numberOfElements = movesCounter - n;
+        }
 
-        for (int i = movesCounter; i > numberOfElements; i--) {
+        for (int i = movesHistory.size() - 1; i > numberOfElements - 1; i--) {
             System.out.println(movesHistory.get(i));
         }
     }
