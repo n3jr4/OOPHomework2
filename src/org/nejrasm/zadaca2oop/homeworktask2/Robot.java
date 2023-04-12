@@ -1,15 +1,16 @@
 package org.nejrasm.zadaca2oop.homeworktask2;
 
+import org.nejrasm.zadaca2oop.lecturetask.Students;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Robot {
-    final private int initialXPosition;
-    final private int initialYPosition;
-    private int currentXPosition;
-    private int currentYPosition;
+    private final int initialXPosition;
+    private final int initialYPosition;
     private int movesCounter = 0;
-    private List<String> movesHistory = new ArrayList<>();
+    private final List<Moves> movesHistory;
+    private final Moves move;
 
     public Robot() {
         this(0, 0);
@@ -18,9 +19,9 @@ public class Robot {
     public Robot(final int initialXPosition, final int initialYPosition) {
         this.initialXPosition = initialXPosition;
         this.initialYPosition = initialYPosition;
-        this.currentXPosition = initialXPosition;
-        this.currentYPosition = initialYPosition;
-        movesHistory.add(getPosition());
+        this.movesHistory = new ArrayList<Moves>();
+        this.move = new Moves(this.initialXPosition, this.initialYPosition);
+        addMoves(move);
         movesCounter += 1;
     }
 
@@ -33,49 +34,53 @@ public class Robot {
     }
 
     public void moveSouth() {
-        this.currentYPosition -= 1;
+        this.move.setCurrentYPosition(this.move.getCurrentYPosition() - 1);
+        addMoves(move);
         movesCounter += 1;
-        movesHistory.add(getPosition());
     }
 
     public void moveNorth() {
-        this.currentYPosition += 1;
+        this.move.setCurrentYPosition(this.move.getCurrentYPosition() + 1);
+        addMoves(move);
         movesCounter += 1;
-        movesHistory.add(getPosition());
     }
 
     public void moveEast() {
-        this.currentXPosition += 1;
+        this.move.setCurrentXPosition(this.move.getCurrentXPosition() + 1);
+        addMoves(move);
         movesCounter += 1;
-        movesHistory.add(getPosition());
     }
 
     public void moveWest() {
-        this.currentXPosition -= 1;
+        this.move.setCurrentXPosition(this.move.getCurrentXPosition() - 1);
+        addMoves(move);
         movesCounter += 1;
-        movesHistory.add(getPosition());
     }
 
-    public String getPosition() {
-        return ("(" + this.currentXPosition + "," + this.currentYPosition + ")");
+    public Moves getPosition() {
+        return this.move;
     }
 
     public double getDistance() {
-        return Math.sqrt(Math.pow((double) (this.currentXPosition - this.initialXPosition), 2) + Math.pow((double) (this.currentYPosition - this.initialYPosition), 2));
+        return Math.sqrt(Math.pow((double) (this.move.getCurrentXPosition() - this.initialXPosition), 2) + Math.pow((double) (this.move.getCurrentXPosition() - this.initialYPosition), 2));
     }
 
     public int getMoves() {
         return movesCounter;
     }
 
-    public void printLastPosition(int n) {
-        int numberOfElements = 0;
-        if (n < movesCounter) {
-            numberOfElements = movesCounter - n;
-        }
+    public void addMoves(final Moves move) {
+        Moves currentMove = new Moves(this.move.getCurrentXPosition(), this.move.getCurrentYPosition());
+        this.movesHistory.add(currentMove);
+    }
 
-        for (int i = movesHistory.size() - 1; i > numberOfElements - 1; i--) {
-            System.out.println(movesHistory.get(i));
+    public void printLastPosition(int n) {
+        int limit = 0;
+        if (n < movesCounter) {
+            limit = movesCounter - n;
+        }
+        for (int i = movesHistory.size() - 1; i > limit - 1; i--) {
+            System.out.println(movesHistory.get(i).toString());
         }
     }
 
